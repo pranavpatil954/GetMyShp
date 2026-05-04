@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Environment variables (contains secrets!)
+.env
+
+# Database files (local user data)
+backend/db/*.json
+
+# IDE
+.vscode/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Build output
+frontend/build/
+
+# Large data files (exceed GitHub 100MB limit)
+backend/data/admin3.json
+backend/data/admin4.json
+backend/village-data-mh/
+backend/village-data-master/
+
+# Logs
+*.log
+npm-debug.log*
