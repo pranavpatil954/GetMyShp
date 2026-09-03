@@ -1,192 +1,129 @@
 # GetMySHP — Administrative Boundary Download Portal
 
-> "Every boundary tells a story. Knowledge of the land should be free."
+> **"Every boundary tells a story. Spatial knowledge should be accessible to all."**
 
-A full-stack GIS web portal for browsing, previewing, and downloading administrative
-boundary shapefiles of India — from Country → State → District → Taluka → Village.
+GetMySHP is a full-stack Web GIS portal for querying, previewing, and downloading administrative boundary Shapefiles of India across all administrative levels: **Country (Admin 0) → State (Admin 1) → District (Admin 2) → Taluka (Admin 3) → Village (Admin 4)**.
 
 ---
 
-## PROJECT STRUCTURE
+## 🌟 Key Features
 
-```
+- 🗺 **Interactive Map Preview**: Dynamic Leaflet.js map with auto-zoom (`flyToBounds`) for instant boundary inspection.
+- 📦 **Multi-Format Export**: On-the-fly packaging of spatial data into ESRI Shapefile components (`.shp`, `.shx`, `.dbf`, `.prj`) inside `.zip` archives.
+- ⚡ **In-Memory GeoJSON Engine**: Loads boundary geometries directly into RAM at server start for sub-millisecond API response times.
+- 🔒 **Secure Authentication**: JWT session handling with bcrypt password hashing.
+- 🌐 **WGS84 Standard**: All coordinate references compliant with EPSG:4326 for seamless compatibility with QGIS, ArcGIS Pro, and Google Earth.
+
+---
+
+## 🏗 Project Architecture
+
+```text
 gis-portal/
 ├── backend/
-│   ├── data/
-│   │   ├── admin0.json     ← Country level
-│   │   ├── admin1.json     ← State level
-│   │   ├── admin2.json     ← District level
-│   │   ├── admin3.json     ← Taluka level
-│   │   └── admin4.json     ← Village level
+│   ├── data/             ← Boundary GeoJSON datasets (Admin 0 - Admin 4)
 │   ├── routes/
-│   │   ├── auth.js
-│   │   └── gis.js
-│   ├── server.js
-│   └── package.json
+│   │   ├── auth.js       ← Registration & login authentication
+│   │   ├── gis.js        ← Spatial querying, preview, and shapefile export
+│   │   └── admin.js      ← Analytics & statistics API
+│   ├── db.js             ← Lightweight JSON-based local store
+│   └── server.js         ← Express server & static build handler
 │
-└── frontend/
-    ├── public/
-    │   └── index.html
-    ├── src/
-    │   ├── context/AuthContext.js
-    │   ├── pages/AuthPage.js
-    │   ├── pages/Dashboard.js
-    │   ├── App.js
-    │   └── index.js
-    └── package.json
+├── frontend/
+│   ├── public/
+│   └── src/
+│       ├── context/
+│       │   └── AuthContext.js
+│       ├── pages/
+│       │   ├── AuthPage.js    ← Sign in / registration interface
+│       │   └── Dashboard.js   ← GIS portal & interactive map preview
+│       └── App.js
+│
+├── package.json          ← Build & deployment orchestration
+└── render.yaml           ← Cloud deployment blueprint
 ```
 
 ---
 
-## ══════════════════════════════════════════════════
-## STEP 1 — CONVERT YOUR SHAPEFILES TO GEOJSON
-## (THE MOST IMPORTANT STEP)
-## ══════════════════════════════════════════════════
+## 🚀 Live Portal & Quick Start
 
-You have: .shp, .shx, .prj, .dbf, .cpg files
-You need: .json (GeoJSON) files for the backend
+### 🌐 Live Deployment
+Access the portal live at: **[GetMySHP Web Service](https://getmyshp.onrender.com)**
 
-### Option A — QGIS (Recommended, Free)
-1. Open QGIS
-2. Layer → Add Layer → Add Vector Layer
-3. Select your .shp file
-4. Right-click the layer → Export → Save Features As...
-5. Format: GeoJSON
-6. CRS: EPSG:4326 (WGS84) ← VERY IMPORTANT
-7. Save as: admin0.json (or admin1, admin2, admin3, admin4)
+### 💻 Running Locally
 
-### Option B — ogr2ogr (Command Line, Fast)
-Install GDAL, then run:
-```
-ogr2ogr -f GeoJSON -t_srs EPSG:4326 admin1.json your_state_shapefile.shp
-ogr2ogr -f GeoJSON -t_srs EPSG:4326 admin2.json your_district_shapefile.shp
-ogr2ogr -f GeoJSON -t_srs EPSG:4326 admin3.json your_taluka_shapefile.shp
-ogr2ogr -f GeoJSON -t_srs EPSG:4326 admin4.json your_village_shapefile.shp
-```
-
-### Option C — ArcGIS Pro
-1. Open your shapefile in ArcGIS
-2. Right-click layer → Data → Export Features
-3. Output type: GeoJSON
-4. Coordinate system: GCS WGS 1984
-
----
-
-## STEP 2 — CHECK GEOJSON PROPERTY NAMES
-
-Your GeoJSON features MUST have these property names (case-sensitive):
-
-```json
-{
-  "type": "Feature",
-  "properties": {
-    "STATE":    "Maharashtra",
-    "DISTRICT": "Kolhapur",
-    "TALUKA":   "Karvir",
-    "VILLAGE":  "Talsande"
-  },
-  "geometry": { ... }
-}
-```
-
-If your shapefile uses different column names (e.g. "St_Name", "Dist_NM"),
-you need to rename them. In QGIS:
-- Open attribute table
-- Field Calculator → rename columns to STATE, DISTRICT, TALUKA, VILLAGE
-
-For admin levels that don't have all fields (e.g. admin1 only has STATE),
-that's fine — just include what applies.
-
----
-
-## STEP 3 — PLACE FILES IN BACKEND
-
-Copy your converted JSON files to:
-```
-gis-portal/backend/data/
-├── admin0.json   ← (optional) Country boundary
-├── admin1.json   ← State boundaries
-├── admin2.json   ← District boundaries
-├── admin3.json   ← Taluka boundaries
-└── admin4.json   ← Village boundaries
-```
-
----
-
-## STEP 4 — RUN THE APPLICATION
-
-### Backend
+#### 1. Clone & Install Dependencies
 ```bash
-cd gis-portal/backend
-npm install
-node server.js
-# Runs at http://localhost:5000
+git clone https://github.com/pranavpatil954/GetMyShp.git
+cd GetMyShp
+npm run install-all
 ```
 
-### Frontend
+#### 2. Environment Setup
+Create a `.env` file inside the `backend/` directory:
+```env
+PORT=5000
+JWT_SECRET=your_secure_random_secret
+```
+
+#### 3. Start Development Environment
+Run the launch script from the project root:
 ```bash
-cd gis-portal/frontend
-npm install
 npm start
-# Runs at http://localhost:3000
 ```
-
-Open browser → http://localhost:3000
-Register an account → Start downloading!
-
----
-
-## API REFERENCE
-
-### Auth
-POST /api/auth/register   { name, email, password }
-POST /api/auth/login      { email, password }
-
-### GIS (all require: Authorization: Bearer <token>)
-GET  /api/gis/states
-GET  /api/gis/districts/:state
-GET  /api/gis/talukas/:district
-GET  /api/gis/villages/:taluka
-POST /api/gis/preview     { state, district?, taluka?, village? }
-POST /api/gis/download    { state, district?, taluka?, village?, mode }
-  mode: "boundary" | "subunits" | "full"
+- **Backend API**: `http://localhost:5000/api`
+- **Frontend App**: `http://localhost:3000`
 
 ---
 
-## EXAMPLE API CALLS (cURL)
+## 🗺 Shapefile Conversion Guide
 
-# Login
-curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"nav@example.com","password":"test123"}'
+If you wish to add custom regional boundaries:
 
-# Get states
-curl http://localhost:5000/api/gis/states \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+1. **Format Requirements**: Convert your `.shp` files to standard `.json` (GeoJSON).
+2. **Coordinate Reference System (CRS)**: Must be set to **EPSG:4326 (WGS84)**.
+3. **Required Attribute Mapping**:
+   - `STATE` (e.g., "Maharashtra")
+   - `DISTRICT` (e.g., "Kolhapur")
+   - `TALUKA` (e.g., "Karvir")
+   - `VILLAGE` (e.g., "Talsande")
 
-# Download Kolhapur district shapefile
-curl -X POST http://localhost:5000/api/gis/download \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"state":"Maharashtra","district":"Kolhapur","mode":"boundary"}' \
-  --output kolhapur.zip
-
----
-
-## TECH STACK
-
-Backend:  Node.js · Express · JWT · bcryptjs · shp-write · archiver
-Frontend: React · React Router · Leaflet · React-Leaflet · Axios
-Design:   Space Mono + DM Sans · Dark cartographic theme · WGS84
+### Conversion using QGIS (Free & Open Source)
+1. Open QGIS → Layer → Add Vector Layer.
+2. Select your `.shp` file.
+3. Right-click layer → **Export** → **Save Features As...**
+4. Set Format to **GeoJSON** and CRS to **EPSG:4326 - WGS84**.
+5. Save inside `backend/data/`.
 
 ---
 
-## NOTES
+## 🛰 API Endpoint Documentation
 
-- All GeoJSON data is loaded into RAM on startup — no DB needed
-- The dummy admin0.json has sample Maharashtra data for testing
-- Replace with your real converted GeoJSON files for production
-- CRS must be WGS84 (EPSG:4326) for Leaflet to render correctly
+All GIS endpoints require a valid Bearer Token: `Authorization: Bearer <your_jwt_token>`
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Register a new user account |
+| `POST` | `/api/auth/login` | Login and receive a JWT token |
+| `GET` | `/api/gis/states` | Fetch list of available states |
+| `GET` | `/api/gis/districts/:state` | Fetch districts for selected state |
+| `GET` | `/api/gis/talukas/:district` | Fetch talukas for selected district |
+| `GET` | `/api/gis/villages/:taluka` | Fetch villages for selected taluka |
+| `POST` | `/api/gis/preview` | Generate GeoJSON boundary preview payload |
+| `POST` | `/api/gis/download` | Export ESRI Shapefile `.zip` archive |
 
 ---
-Built for: GetMySHP — Administrative Boundary Download Portal
+
+## 🔒 Security & Privacy Statement
+
+This repository adheres to strict open-source security guidelines:
+- **No Private Keys Exposed**: Production environment secrets are passed securely via environment variables.
+- **Sensitive Files Excluded**: Local database files (`backend/db/*.json`), `.env` files, and raw data layers are excluded via `.gitignore`.
+- **Password Security**: Passwords are standardly hashed using `bcryptjs` with salt rounds prior to storage.
+
+---
+
+## 📜 Credits & Data Source
+
+- **Boundary Data Source**: Sourced under academic research license from [GADM (Global Administrative Areas) v2.8](https://gadm.org).
+- **Core Stack**: React 18 · Node.js · Express · Leaflet · shp-write · WGS84 Standard.
