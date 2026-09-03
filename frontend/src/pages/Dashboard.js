@@ -1,7 +1,7 @@
 // ============================================================
 // Dashboard — Main GIS Portal UI
 // ============================================================
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
