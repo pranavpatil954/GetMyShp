@@ -165,6 +165,8 @@ export default function Dashboard() {
 
           {/* Data info */}
           <div style={styles.sideInfo}>
+            <p style={styles.sideInfoTitle}>DATA SOURCE</p>
+            <p style={{ ...styles.sideInfoText, color: '#253D2C', fontWeight: '600', marginBottom: '8px' }}>GADM v2.8 (2015)</p>
             <p style={styles.sideInfoTitle}>DATA LEVELS</p>
             <p style={styles.sideInfoText}>admin0 · Country</p>
             <p style={styles.sideInfoText}>admin1 · State</p>
@@ -219,7 +221,7 @@ export default function Dashboard() {
                       <input type="radio" name="mode" value={m.val}
                         checked={downloadMode === m.val}
                         onChange={() => setDownloadMode(m.val)}
-                        style={{ accentColor: "#2ecc71" }} />
+                        style={{ accentColor: "#2E6F40" }} />
                       <div>
                         <span style={styles.modeLabel}>{m.label}</span>
                         <span style={styles.modeDesc}>{m.desc}</span>
@@ -240,7 +242,8 @@ export default function Dashboard() {
 
                 <p style={styles.hint}>
                   Output: .shp · .shx · .dbf · .prj · .geojson<br />
-                  CRS: WGS84 (EPSG:4326)
+                  CRS: WGS84 (EPSG:4326)<br />
+                  Data Source: GADM 2015
                 </p>
               </div>
 
@@ -259,7 +262,7 @@ export default function Dashboard() {
                   <MapContainer center={[20.5, 78.9]} zoom={5} style={styles.mapContainer}
                     zoomControl={true}>
                     <TileLayer
-                      url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                      url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                       attribution='&copy; CartoDB'
                     />
                     {previewGeoJSON && (
@@ -267,11 +270,11 @@ export default function Dashboard() {
                         <GeoJSON key={JSON.stringify(previewGeoJSON)}
                           data={previewGeoJSON}
                           style={{
-                            color: "#2ecc71",
-                            weight: 2,
+                            color: "#2E6F40",
+                            weight: 2.5,
                             opacity: 0.9,
-                            fillColor: "#2ecc71",
-                            fillOpacity: 0.15,
+                            fillColor: "#68BA7F",
+                            fillOpacity: 0.25,
                           }} />
                         <FitBounds geojson={previewGeoJSON} />
                       </>
@@ -326,6 +329,16 @@ function AboutPanel() {
       <p style={styles.aboutQuote}>
         Get the shapefile you need—fast, simple, and precise.
       </p>
+      <div style={styles.dataSourceBanner}>
+        <span style={{ fontSize: '16px' }}>📊</span>
+        <div>
+          <p style={{ margin: 0, fontSize: '13px', color: '#253D2C', fontWeight: '600', fontFamily: "'Space Mono', monospace" }}>Data Source: GADM 2015</p>
+          <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#2E6F40', lineHeight: '1.5' }}>
+            All administrative boundary data is sourced from the Global Administrative Areas database (GADM), version 2.8 released in 2015.
+            Visit <a href="https://gadm.org" target="_blank" rel="noopener noreferrer" style={{ color: '#253D2C', textDecoration: 'underline' }}>gadm.org</a> for more information.
+          </p>
+        </div>
+      </div>
       <div style={styles.aboutGrid}>
         {[
           { icon: "🗺", title: "Administrative Data", desc: "Country → State → District → Taluka → Village boundary data for India" },
@@ -343,7 +356,7 @@ function AboutPanel() {
       <div style={styles.techStack}>
         <p style={styles.techTitle}>TECH STACK</p>
         <div style={styles.techTags}>
-          {["React", "Node.js", "Express", "Leaflet", "shp-write", "JWT", "GeoJSON", "WGS84"].map((t) => (
+          {["React", "Node.js", "Express", "Leaflet", "shp-write", "JWT", "GeoJSON", "WGS84", "GADM"].map((t) => (
             <span key={t} style={styles.techTag}>{t}</span>
           ))}
         </div>
@@ -353,117 +366,124 @@ function AboutPanel() {
 }
 
 // ── Styles ────────────────────────────────────────────────────
+// Lush Forest palette: #2E6F40, #CFFFDC, #68BA7F, #253D2C
 const styles = {
   shell: {
     display: "flex", flexDirection: "column", height: "100vh",
-    background: "#070f0b", fontFamily: "'DM Sans', sans-serif", color: "#e8f5e9", overflow: "hidden",
+    background: "#CFFFDC", fontFamily: "'DM Sans', sans-serif", color: "#253D2C", overflow: "hidden",
   },
   navbar: {
     display: "flex", alignItems: "center", justifyContent: "space-between",
     padding: "0 24px", height: "56px",
-    background: "#0a1a0f", borderBottom: "1px solid #1e4a30",
-    flexShrink: 0,
+    background: "#ffffff", borderBottom: "1px solid #68BA7F",
+    flexShrink: 0, boxShadow: "0 1px 4px rgba(37, 61, 44, 0.08)",
   },
   navLeft: { display: "flex", alignItems: "center", gap: "10px" },
-  navLogo: { fontFamily: "'Space Mono', monospace", fontSize: "18px", fontWeight: "700", color: "#7ddb9b" },
+  navLogo: { fontFamily: "'Space Mono', monospace", fontSize: "18px", fontWeight: "700", color: "#2E6F40" },
   navBadge: {
     fontFamily: "'Space Mono', monospace", fontSize: "9px", letterSpacing: "2px",
-    border: "1px solid #2ecc71", color: "#2ecc71", padding: "2px 6px", borderRadius: "3px",
+    border: "1px solid #2E6F40", color: "#2E6F40", padding: "2px 6px", borderRadius: "3px",
   },
   navCenter: { flex: 1, display: "flex", justifyContent: "center" },
   selectionPill: {
-    fontSize: "12px", color: "#5a8a6a", background: "#0d1f14",
-    padding: "5px 14px", borderRadius: "20px", border: "1px solid #1e4a30",
+    fontSize: "12px", color: "#2E6F40", background: "#e6ffed",
+    padding: "5px 14px", borderRadius: "20px", border: "1px solid #68BA7F",
     fontFamily: "'Space Mono', monospace", letterSpacing: "0.3px",
   },
   navRight: { display: "flex", alignItems: "center", gap: "14px" },
-  navUser: { fontSize: "13px", color: "#5a8a6a" },
+  navUser: { fontSize: "13px", color: "#2E6F40" },
   logoutBtn: {
-    background: "transparent", border: "1px solid #1e4a30", borderRadius: "6px",
-    color: "#5a8a6a", padding: "6px 14px", cursor: "pointer", fontSize: "12px",
-    fontFamily: "'Space Mono', monospace",
+    background: "transparent", border: "1px solid #68BA7F", borderRadius: "6px",
+    color: "#2E6F40", padding: "6px 14px", cursor: "pointer", fontSize: "12px",
+    fontFamily: "'Space Mono', monospace", transition: "all 0.2s",
   },
   body: { display: "flex", flex: 1, overflow: "hidden" },
   sidebar: {
-    width: "200px", background: "#0a1a0f", borderRight: "1px solid #1e4a30",
+    width: "200px", background: "#ffffff", borderRight: "1px solid #68BA7F",
     display: "flex", flexDirection: "column", padding: "16px 8px", gap: "4px", flexShrink: 0,
   },
   sideItem: {
     display: "flex", alignItems: "center", gap: "10px",
     padding: "10px 12px", borderRadius: "8px", border: "none",
-    background: "transparent", color: "#4a7a5a", cursor: "pointer",
+    background: "transparent", color: "#2E6F40", cursor: "pointer",
     fontSize: "13px", fontFamily: "'DM Sans', sans-serif", textAlign: "left",
     transition: "all 0.15s",
   },
-  sideItemActive: { background: "#1e4a30", color: "#7ddb9b" },
+  sideItemActive: { background: "#2E6F40", color: "#ffffff" },
   sideIcon: { fontSize: "16px", width: "20px", textAlign: "center" },
   sideLabel: { fontWeight: "500" },
-  sideInfo: { marginTop: "auto", padding: "12px 12px 4px", borderTop: "1px solid #1e4a30" },
-  sideInfoTitle: { fontSize: "9px", letterSpacing: "2px", color: "#2a4a34", fontFamily: "'Space Mono', monospace", marginBottom: "8px" },
-  sideInfoText: { fontSize: "11px", color: "#2e5a3e", fontFamily: "'Space Mono', monospace", lineHeight: "1.8" },
+  sideInfo: { marginTop: "auto", padding: "12px 12px 4px", borderTop: "1px solid #68BA7F" },
+  sideInfoTitle: { fontSize: "9px", letterSpacing: "2px", color: "#68BA7F", fontFamily: "'Space Mono', monospace", marginBottom: "8px" },
+  sideInfoText: { fontSize: "11px", color: "#2E6F40", fontFamily: "'Space Mono', monospace", lineHeight: "1.8" },
   main: { flex: 1, overflow: "auto", padding: "24px" },
   mainInner: { display: "flex", gap: "24px", height: "100%", minHeight: "calc(100vh - 104px)" },
   controls: {
-    width: "320px", flexShrink: 0, background: "#0a1a0f",
-    border: "1px solid #1e4a30", borderRadius: "12px",
+    width: "320px", flexShrink: 0, background: "#ffffff",
+    border: "1px solid #68BA7F", borderRadius: "12px",
     padding: "24px", display: "flex", flexDirection: "column", gap: "14px", overflowY: "auto",
+    boxShadow: "0 2px 8px rgba(37, 61, 44, 0.06)",
   },
-  controlsTitle: { fontFamily: "'Space Mono', monospace", fontSize: "16px", color: "#e8f5e9", margin: 0 },
-  controlsSubtitle: { fontSize: "12px", color: "#4a7a5a", margin: 0, marginTop: "-8px" },
+  controlsTitle: { fontFamily: "'Space Mono', monospace", fontSize: "16px", color: "#253D2C", margin: 0 },
+  controlsSubtitle: { fontSize: "12px", color: "#68BA7F", margin: 0, marginTop: "-8px" },
   searchInput: {
-    background: "#0d1f14", border: "1px solid #1e4a30", borderRadius: "8px",
-    padding: "10px 12px", color: "#e8f5e9", fontSize: "13px",
+    background: "#e6ffed", border: "1px solid #68BA7F", borderRadius: "8px",
+    padding: "10px 12px", color: "#253D2C", fontSize: "13px",
     fontFamily: "'DM Sans', sans-serif", outline: "none",
   },
   fieldGroup: { display: "flex", flexDirection: "column", gap: "5px" },
-  fieldLabel: { fontSize: "10px", fontFamily: "'Space Mono', monospace", color: "#4a7a5a", letterSpacing: "1px", textTransform: "uppercase" },
+  fieldLabel: { fontSize: "10px", fontFamily: "'Space Mono', monospace", color: "#2E6F40", letterSpacing: "1px", textTransform: "uppercase" },
   select: {
-    background: "#0d1f14", border: "1px solid #1e4a30", borderRadius: "8px",
-    padding: "10px 12px", color: "#e8f5e9", fontSize: "13px",
+    background: "#e6ffed", border: "1px solid #68BA7F", borderRadius: "8px",
+    padding: "10px 12px", color: "#253D2C", fontSize: "13px",
     fontFamily: "'DM Sans', sans-serif", outline: "none", cursor: "pointer",
   },
   selectDisabled: { opacity: 0.4, cursor: "not-allowed" },
   modeSection: { display: "flex", flexDirection: "column", gap: "8px" },
-  modeTitle: { fontSize: "10px", fontFamily: "'Space Mono', monospace", color: "#4a7a5a", letterSpacing: "1px", textTransform: "uppercase", margin: 0 },
-  modeOption: { display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer", padding: "8px", background: "#0d1f14", borderRadius: "7px", border: "1px solid #1a3a24" },
-  modeLabel: { display: "block", fontSize: "13px", color: "#c8e6c9", fontWeight: "500" },
-  modeDesc: { display: "block", fontSize: "11px", color: "#4a7a5a", marginTop: "2px" },
-  errorBox: { background: "#1a0a0a", border: "1px solid #5a2020", borderRadius: "7px", padding: "10px 12px", color: "#f08080", fontSize: "12px" },
-  successBox: { background: "#0a1a0f", border: "1px solid #2ecc71", borderRadius: "7px", padding: "10px 12px", color: "#2ecc71", fontSize: "12px" },
+  modeTitle: { fontSize: "10px", fontFamily: "'Space Mono', monospace", color: "#2E6F40", letterSpacing: "1px", textTransform: "uppercase", margin: 0 },
+  modeOption: { display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer", padding: "8px", background: "#e6ffed", borderRadius: "7px", border: "1px solid #68BA7F" },
+  modeLabel: { display: "block", fontSize: "13px", color: "#253D2C", fontWeight: "500" },
+  modeDesc: { display: "block", fontSize: "11px", color: "#68BA7F", marginTop: "2px" },
+  errorBox: { background: "#fff0f0", border: "1px solid #e06060", borderRadius: "7px", padding: "10px 12px", color: "#c03030", fontSize: "12px" },
+  successBox: { background: "#e6ffed", border: "1px solid #2E6F40", borderRadius: "7px", padding: "10px 12px", color: "#2E6F40", fontSize: "12px" },
   dlBtn: {
-    background: "linear-gradient(135deg, #1e7a44, #2ecc71)", border: "none",
-    borderRadius: "8px", padding: "14px", color: "#000",
+    background: "linear-gradient(135deg, #253D2C, #2E6F40)", border: "none",
+    borderRadius: "8px", padding: "14px", color: "#ffffff",
     fontFamily: "'Space Mono', monospace", fontSize: "13px", fontWeight: "700",
     cursor: "pointer", transition: "opacity 0.2s",
   },
   dlBtnDisabled: { opacity: 0.4, cursor: "not-allowed" },
-  hint: { fontSize: "10px", color: "#2a4a34", fontFamily: "'Space Mono', monospace", lineHeight: "1.7", margin: 0 },
-  mapPanel: { flex: 1, display: "flex", flexDirection: "column", background: "#0a1a0f", border: "1px solid #1e4a30", borderRadius: "12px", overflow: "hidden" },
-  mapHeader: { display: "flex", alignItems: "center", gap: "12px", padding: "12px 18px", borderBottom: "1px solid #1e4a30" },
-  mapTitle: { fontFamily: "'Space Mono', monospace", fontSize: "12px", color: "#5a8a6a", letterSpacing: "1px" },
-  mapLoading: { fontSize: "11px", color: "#2ecc71", animation: "pulse 1s infinite" },
-  mapCount: { marginLeft: "auto", fontSize: "11px", color: "#4a7a5a", fontFamily: "'Space Mono', monospace" },
+  hint: { fontSize: "10px", color: "#68BA7F", fontFamily: "'Space Mono', monospace", lineHeight: "1.7", margin: 0 },
+  mapPanel: { flex: 1, display: "flex", flexDirection: "column", background: "#ffffff", border: "1px solid #68BA7F", borderRadius: "12px", overflow: "hidden", boxShadow: "0 2px 8px rgba(37, 61, 44, 0.06)" },
+  mapHeader: { display: "flex", alignItems: "center", gap: "12px", padding: "12px 18px", borderBottom: "1px solid #68BA7F" },
+  mapTitle: { fontFamily: "'Space Mono', monospace", fontSize: "12px", color: "#2E6F40", letterSpacing: "1px" },
+  mapLoading: { fontSize: "11px", color: "#2E6F40", animation: "pulse 1s infinite" },
+  mapCount: { marginLeft: "auto", fontSize: "11px", color: "#68BA7F", fontFamily: "'Space Mono', monospace" },
   mapWrapper: { flex: 1, position: "relative" },
   mapContainer: { width: "100%", height: "100%", minHeight: "500px" },
   mapOverlay: {
     position: "absolute", inset: 0, display: "flex", alignItems: "center",
     justifyContent: "center", pointerEvents: "none", zIndex: 999,
   },
-  mapOverlayText: { background: "#0a1a0fee", border: "1px solid #1e4a30", borderRadius: "8px", padding: "10px 20px", fontSize: "13px", color: "#4a7a5a", fontFamily: "'Space Mono', monospace" },
+  mapOverlayText: { background: "#ffffffee", border: "1px solid #68BA7F", borderRadius: "8px", padding: "10px 20px", fontSize: "13px", color: "#2E6F40", fontFamily: "'Space Mono', monospace" },
   placeholder: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "60vh", gap: "12px" },
   placeholderIcon: { fontSize: "48px", opacity: 0.3 },
-  placeholderText: { fontSize: "18px", color: "#4a7a5a", fontFamily: "'Space Mono', monospace" },
-  placeholderSub: { fontSize: "12px", color: "#2a4a34" },
+  placeholderText: { fontSize: "18px", color: "#2E6F40", fontFamily: "'Space Mono', monospace" },
+  placeholderSub: { fontSize: "12px", color: "#68BA7F" },
   aboutPanel: { maxWidth: "800px", padding: "8px" },
-  aboutTitle: { fontFamily: "'Space Mono', monospace", fontSize: "22px", color: "#7ddb9b", marginBottom: "8px" },
-  aboutQuote: { fontStyle: "italic", color: "#4a7a5a", borderLeft: "3px solid #2ecc71", paddingLeft: "16px", marginBottom: "28px", fontSize: "14px" },
+  dataSourceBanner: {
+    display: "flex", alignItems: "flex-start", gap: "12px",
+    background: "#e6ffed", border: "1px solid #2E6F40", borderRadius: "10px",
+    padding: "16px 20px", marginBottom: "24px",
+  },
+  aboutTitle: { fontFamily: "'Space Mono', monospace", fontSize: "22px", color: "#2E6F40", marginBottom: "8px" },
+  aboutQuote: { fontStyle: "italic", color: "#68BA7F", borderLeft: "3px solid #2E6F40", paddingLeft: "16px", marginBottom: "28px", fontSize: "14px" },
   aboutGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "28px" },
-  aboutCard: { background: "#0a1a0f", border: "1px solid #1e4a30", borderRadius: "10px", padding: "20px" },
+  aboutCard: { background: "#ffffff", border: "1px solid #68BA7F", borderRadius: "10px", padding: "20px" },
   aboutCardIcon: { fontSize: "24px", display: "block", marginBottom: "10px" },
-  aboutCardTitle: { fontFamily: "'Space Mono', monospace", fontSize: "13px", color: "#7ddb9b", marginBottom: "6px" },
-  aboutCardDesc: { fontSize: "12px", color: "#5a8a6a", lineHeight: "1.6" },
-  techStack: { background: "#0a1a0f", border: "1px solid #1e4a30", borderRadius: "10px", padding: "20px" },
-  techTitle: { fontSize: "9px", letterSpacing: "2px", color: "#2a4a34", fontFamily: "'Space Mono', monospace", marginBottom: "12px" },
+  aboutCardTitle: { fontFamily: "'Space Mono', monospace", fontSize: "13px", color: "#2E6F40", marginBottom: "6px" },
+  aboutCardDesc: { fontSize: "12px", color: "#253D2C", lineHeight: "1.6" },
+  techStack: { background: "#ffffff", border: "1px solid #68BA7F", borderRadius: "10px", padding: "20px" },
+  techTitle: { fontSize: "9px", letterSpacing: "2px", color: "#68BA7F", fontFamily: "'Space Mono', monospace", marginBottom: "12px" },
   techTags: { display: "flex", flexWrap: "wrap", gap: "8px" },
-  techTag: { background: "#1e4a30", color: "#7ddb9b", padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontFamily: "'Space Mono', monospace" },
+  techTag: { background: "#2E6F40", color: "#CFFFDC", padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontFamily: "'Space Mono', monospace" },
 };

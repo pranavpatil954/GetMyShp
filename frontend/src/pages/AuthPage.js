@@ -1,6 +1,6 @@
 // ============================================================
 // AuthPage — Login & Register
-// Aesthetic: Dark cartographic, grid-lines, topography vibes
+// Aesthetic: Light, fresh Lush Forest palette
 // ============================================================
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -38,29 +38,29 @@ export default function AuthPage() {
       <svg style={styles.bgSvg} viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
         <defs>
           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a3a2a" strokeWidth="0.5" />
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#68BA7F" strokeWidth="0.3" />
           </pattern>
         </defs>
-        <rect width="1200" height="800" fill="#070f0b" />
+        <rect width="1200" height="800" fill="#CFFFDC" />
         <rect width="1200" height="800" fill="url(#grid)" />
         {/* Topographic contour-like ellipses */}
         {[200, 160, 120, 80, 40].map((r, i) => (
           <ellipse key={i} cx="900" cy="400" rx={r * 3} ry={r * 1.5}
-            fill="none" stroke="#1e4a30" strokeWidth="0.8" opacity={0.6 - i * 0.05} />
+            fill="none" stroke="#68BA7F" strokeWidth="0.8" opacity={0.4 - i * 0.05} />
         ))}
         {[200, 160, 120, 80, 40].map((r, i) => (
           <ellipse key={i + 10} cx="200" cy="600" rx={r * 2} ry={r}
-            fill="none" stroke="#1e4a30" strokeWidth="0.8" opacity={0.5 - i * 0.05} />
+            fill="none" stroke="#68BA7F" strokeWidth="0.8" opacity={0.35 - i * 0.05} />
         ))}
         {/* Meridian lines */}
         {[0, 1, 2, 3, 4, 5].map((i) => (
           <line key={i} x1={200 * i} y1="0" x2={200 * i} y2="800"
-            stroke="#0d2018" strokeWidth="1" />
+            stroke="#68BA7F" strokeWidth="0.3" />
         ))}
         {/* Latitude lines */}
         {[0, 1, 2, 3, 4].map((i) => (
           <line key={i} x1="0" y1={200 * i} x2="1200" y2={200 * i}
-            stroke="#0d2018" strokeWidth="1" />
+            stroke="#68BA7F" strokeWidth="0.3" />
         ))}
       </svg>
 
@@ -72,7 +72,7 @@ export default function AuthPage() {
         </div>
 
         {/* Heading & Tagline */}
-        <h2 style={{ fontFamily: "'Space Mono', monospace", fontSize: '18px', color: '#e8f5e9', marginBottom: '8px' }}>
+        <h2 style={{ fontFamily: "'Space Mono', monospace", fontSize: '18px', color: '#253D2C', marginBottom: '8px' }}>
           Find. Select. Download. Your SHP in seconds.
         </h2>
         <p style={styles.tagline}>
@@ -117,7 +117,7 @@ export default function AuthPage() {
         </form>
 
         <p style={styles.footer}>
-          Administrative boundary data · WGS84 · India
+          Administrative boundary data · WGS84 · India · GADM 2015
         </p>
       </div>
     </div>
@@ -133,7 +133,7 @@ const styles = {
     fontFamily: "'DM Sans', sans-serif",
     position: "relative",
     overflow: "hidden",
-    background: "#070f0b",
+    background: "#CFFFDC",
   },
   bgSvg: {
     position: "absolute",
@@ -146,12 +146,12 @@ const styles = {
   card: {
     position: "relative",
     zIndex: 1,
-    background: "rgba(10, 22, 15, 0.92)",
-    border: "1px solid #1e4a30",
+    background: "rgba(255, 255, 255, 0.92)",
+    border: "1px solid #68BA7F",
     borderRadius: "16px",
     padding: "48px 44px",
     width: "420px",
-    boxShadow: "0 0 80px rgba(0, 200, 100, 0.05), 0 20px 60px rgba(0,0,0,0.6)",
+    boxShadow: "0 0 80px rgba(46, 111, 64, 0.08), 0 20px 60px rgba(37, 61, 44, 0.1)",
     backdropFilter: "blur(12px)",
   },
   logoRow: {
@@ -163,10 +163,10 @@ const styles = {
   logoSub: {
     fontFamily: "'Space Mono', monospace",
     fontSize: "11px",
-    color: "#2ecc71",
+    color: "#2E6F40",
     letterSpacing: "3px",
     fontWeight: "700",
-    border: "1px solid #2ecc71",
+    border: "1px solid #2E6F40",
     padding: "2px 6px",
     borderRadius: "3px",
   },
@@ -174,23 +174,23 @@ const styles = {
     fontFamily: "'Space Mono', monospace",
     fontSize: "24px",
     fontWeight: "700",
-    color: "#e8f5e9",
+    color: "#253D2C",
     letterSpacing: "-0.5px",
   },
   tagline: {
     fontFamily: "'DM Sans', sans-serif",
     fontSize: "13px",
-    color: "#5a8a6a",
+    color: "#68BA7F",
     lineHeight: "1.7",
     marginBottom: "28px",
     paddingLeft: "14px",
-    borderLeft: "2px solid #2ecc7144",
+    borderLeft: "2px solid #2E6F40",
     fontStyle: "italic",
   },
   tabs: {
     display: "flex",
     gap: "4px",
-    background: "#0d1f14",
+    background: "#e6ffed",
     borderRadius: "8px",
     padding: "4px",
     marginBottom: "24px",
@@ -200,7 +200,7 @@ const styles = {
     padding: "8px",
     border: "none",
     background: "transparent",
-    color: "#5a8a6a",
+    color: "#68BA7F",
     borderRadius: "6px",
     cursor: "pointer",
     fontFamily: "'DM Sans', sans-serif",
@@ -209,8 +209,8 @@ const styles = {
     transition: "all 0.2s",
   },
   tabActive: {
-    background: "#1e4a30",
-    color: "#7ddb9b",
+    background: "#2E6F40",
+    color: "#ffffff",
   },
   form: {
     display: "flex",
@@ -225,35 +225,35 @@ const styles = {
   label: {
     fontSize: "12px",
     fontFamily: "'Space Mono', monospace",
-    color: "#5a8a6a",
+    color: "#2E6F40",
     letterSpacing: "0.5px",
     textTransform: "uppercase",
   },
   input: {
-    background: "#0d1f14",
-    border: "1px solid #1e4a30",
+    background: "#e6ffed",
+    border: "1px solid #68BA7F",
     borderRadius: "8px",
     padding: "12px 14px",
-    color: "#e8f5e9",
+    color: "#253D2C",
     fontSize: "14px",
     fontFamily: "'DM Sans', sans-serif",
     outline: "none",
     transition: "border-color 0.2s",
   },
   errorBox: {
-    background: "#2a1010",
-    border: "1px solid #6b2020",
+    background: "#fff0f0",
+    border: "1px solid #e06060",
     borderRadius: "8px",
     padding: "10px 14px",
-    color: "#f08080",
+    color: "#c03030",
     fontSize: "13px",
   },
   submitBtn: {
-    background: "linear-gradient(135deg, #1e7a44, #2ecc71)",
+    background: "linear-gradient(135deg, #253D2C, #2E6F40)",
     border: "none",
     borderRadius: "8px",
     padding: "14px",
-    color: "#000",
+    color: "#ffffff",
     fontFamily: "'Space Mono', monospace",
     fontSize: "14px",
     fontWeight: "700",
@@ -268,8 +268,8 @@ const styles = {
   spinner: {
     width: "18px",
     height: "18px",
-    border: "2px solid #00000033",
-    borderTop: "2px solid #000",
+    border: "2px solid #ffffff33",
+    borderTop: "2px solid #fff",
     borderRadius: "50%",
     animation: "spin 0.7s linear infinite",
     display: "inline-block",
@@ -278,7 +278,7 @@ const styles = {
     marginTop: "24px",
     textAlign: "center",
     fontSize: "11px",
-    color: "#2a4a34",
+    color: "#68BA7F",
     fontFamily: "'Space Mono', monospace",
     letterSpacing: "0.5px",
   },

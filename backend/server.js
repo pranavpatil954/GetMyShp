@@ -21,7 +21,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ── Middleware ────────────────────────────────────────────────
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? true  // Allow all origins in production
+  : 'http://localhost:3000';
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // Configure multer for file uploads
@@ -76,8 +79,22 @@ app.use("/api/admin", adminRoutes);          // Admin stats routes
 app.use("/api/gis/upload-convert", upload.single("file"));
 app.use("/api/gis", gisRoutes);
 
-// ── Health check ─────────────────────────────────────────────
-app.get("/", (req, res) => res.json({ status: "GetMySHP API running 🌍" }));
+// ── Serve React frontend in production ───────────────────────
+const frontendBuild = path.join(__dirname, '..', 'frontend', 'build');
+if (fs.existsSync(frontendBuild)) {
+  console.log('📦 Serving frontend from build folder...');
+  app.use(express.static(frontendBuild));
+
+  // Catch-all: serve React app for any non-API route
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(frontendBuild, 'index.html'));
+    }
+  });
+} else {
+  // Health check when no frontend build exists
+  app.get('/', (req, res) => res.json({ status: 'GetMySHP API running 🌍' }));
+}
 
 // ── Start the server ───────────────────────────────────────────
 app.listen(PORT, () => {
