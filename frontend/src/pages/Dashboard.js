@@ -334,8 +334,8 @@ function AboutPanel() {
         <div>
           <p style={{ margin: 0, fontSize: '13px', color: '#253D2C', fontWeight: '600', fontFamily: "'Space Mono', monospace" }}>Data Source: GADM 2015</p>
           <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#2E6F40', lineHeight: '1.5' }}>
-            All administrative boundary data is sourced from the Global Administrative Areas database (GADM), version 2.8 released in 2015.
-            Visit <a href="https://gadm.org" target="_blank" rel="noopener noreferrer" style={{ color: '#253D2C', textDecoration: 'underline' }}>gadm.org</a> for more information.
+            All administrative boundary data is sourced from GADM (Global Administrative Areas) v2.8 for educational and non-commercial research purposes.
+            Visit <a href="https://gadm.org/license.html" target="_blank" rel="noopener noreferrer" style={{ color: '#253D2C', textDecoration: 'underline' }}>gadm.org/license</a> for licensing details.
           </p>
         </div>
       </div>

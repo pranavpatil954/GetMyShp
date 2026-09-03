@@ -123,7 +123,15 @@ This repository adheres to strict open-source security guidelines:
 
 ---
 
-## 📜 Credits & Data Source
+## ⚖️ Data License & Non-Commercial Disclaimer
 
-- **Boundary Data Source**: Sourced under academic research license from [GADM (Global Administrative Areas) v2.8](https://gadm.org).
-- **Core Stack**: React 18 · Node.js · Express · Leaflet · shp-write · WGS84 Standard.
+- **Boundary Data Source**: Administrative boundary data is derived from [GADM (Global Administrative Areas)](https://gadm.org) version 2.8.
+- **Permitted Use**: GADM data is freely available for **academic, educational, personal, and non-commercial research purposes**. 
+- **Non-Commercial Notice**: This project and web portal are created strictly for **educational and non-commercial demonstration purposes**. If you intend to use GADM data for commercial purposes, please request permission directly from GADM at [gadm.org/license.html](https://gadm.org/license.html).
+
+---
+
+## 📜 Technical Stack
+
+React 18 · Node.js · Express · Leaflet · shp-write · WGS84 (EPSG:4326) Standard.
+
